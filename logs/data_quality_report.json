@@ -1,0 +1,149 @@
+{
+  "timestamp": "2026-11-21T22:29:28.195078",
+  "counts": {
+    "raw_deliveries": 295732,
+    "cleaned_deliveries": 295732,
+    "batter_innings": 18768,
+    "bowler_innings": 14700,
+    "batter_seasons": 2959,
+    "bowler_seasons": 2203,
+    "batter_careers": 739,
+    "bowler_careers": 578
+  },
+  "validation_results": [
+    {
+      "check": "raw_duplicates",
+      "passed": true,
+      "message": "Found 0 duplicate raw deliveries",
+      "severity": "info",
+      "details": {
+        "count": 0
+      }
+    },
+    {
+      "check": "raw_required_fields",
+      "passed": true,
+      "message": "Missing required fields: {}",
+      "severity": "info",
+      "details": {}
+    },
+    {
+      "check": "cricket_scoring_rules",
+      "passed": true,
+      "message": "Scoring rule violations: 0",
+      "severity": "info",
+      "details": {
+        "violations": []
+      }
+    },
+    {
+      "check": "ball_counting",
+      "passed": false,
+      "message": "Ball counting issues: 681",
+      "severity": "warning",
+      "details": {
+        "issues": [
+          "Match 1082591 innings 1: 121 legal deliveries > 120",
+          "Match 1082597 innings 1: 123 legal deliveries > 120",
+          "Match 1082600 innings 1: 121 legal deliveries > 120",
+          "Match 1082601 innings 1: 122 legal deliveries > 120",
+          "Match 1082602 innings 1: 121 legal deliveries > 120",
+          "Match 1082605 innings 1: 123 legal deliveries > 120",
+          "Match 1082606 innings 1: 122 legal deliveries > 120",
+          "Match 1082606 innings 2: 11 expected legal balls missing",
+          "Match 1082611 innings 1: 122 legal deliveries > 120",
+          "Match 1082612 innings 1: 122 legal deliveries > 120"
+        ]
+      }
+    },
+    {
+      "check": "dismissals",
+      "passed": true,
+      "message": "Dismissal issues: 0",
+      "severity": "info",
+      "details": {
+        "issues": []
+      }
+    },
+    {
+      "check": "extras_breakdown",
+      "passed": true,
+      "message": "Extras issues: 0",
+      "severity": "info",
+      "details": {
+        "issues": []
+      }
+    },
+    {
+      "check": "batter_innings",
+      "passed": true,
+      "message": "Batter innings issues: 0",
+      "severity": "info",
+      "details": {
+        "issues": []
+      }
+    },
+    {
+      "check": "bowler_innings",
+      "passed": true,
+      "message": "Bowler innings issues: 0",
+      "severity": "info",
+      "details": {
+        "issues": []
+      }
+    },
+    {
+      "check": "batter_seasons",
+      "passed": true,
+      "message": "Batter season issues: 0",
+      "severity": "info",
+      "details": {
+        "issues": []
+      }
+    },
+    {
+      "check": "bowler_seasons",
+      "passed": true,
+      "message": "Bowler season issues: 0",
+      "severity": "info",
+      "details": {
+        "issues": []
+      }
+    },
+    {
+      "check": "batter_careers",
+      "passed": true,
+      "message": "Batter career issues: 0",
+      "severity": "info",
+      "details": {
+        "issues": []
+      }
+    },
+    {
+      "check": "bowler_careers",
+      "passed": true,
+      "message": "Bowler career issues: 0",
+      "severity": "info",
+      "details": {
+        "issues": []
+      }
+    }
+  ],
+  "quality_issues_count": 0,
+  "duplicate_records_count": 0,
+  "suspicious_records_count": 0,
+  "summary_stats": {
+    "total_deliveries": 295732,
+    "legal_deliveries": 285856,
+    "wides": 9876,
+    "no_balls": 1226,
+    "wickets": 14705,
+    "boundaries": 50226,
+    "fours": 34447,
+    "sixes": 15779,
+    "total_runs": 401738,
+    "batter_runs": 381529,
+    "bowler_conceded_runs": 394595,
+    "runs_per_over": 8.43
+  }
+}
