@@ -18,8 +18,10 @@ It applies statistical rigor to cricket analytics:
 
 ```bash
 # Clone and install
-git clone <repo>
+git clone https://github.com/vaanssxh/NotOutAnalytics
+
 cd Sports-Analytics
+
 pip install -r requirements.txt
 
 # Run data pipeline (generates quality report)
@@ -31,7 +33,7 @@ python sql/seed_database.py
 # Run statistical analysis
 python execute_analysis.py
 
-# Launch Streamlit Dashboard
+# Launch Streamlit Dashboard //main function of the app
 streamlit run src/dashboard.py
 ```
 
@@ -97,12 +99,6 @@ Then open http://localhost:8501 in your browser.
 ### Data Validation Button
 
 The sidebar has a "Run Data Validation" button that checks all 8 database tables and displays row counts as JSON.
-
-### Fixed Issues
-
-- **KeyError 'total_balls_faced'** (2026-11-22): Fixed in `src/dashboard.py:159` — changed to `balls_faced` to match `v_batter_career` view
-- **TypeError 'RegressionSummary' object not subscriptable** (2026-11-22): Fixed in `src/dashboard.py:294-295` — changed dict access to attribute access
-- **Data Validation JSON error** (2026-11-22): Fixed in `src/statistics/data_access.py` — `validate_database()` now returns dict with table row counts
 
 ## Key Findings (from 18 seasons, 1,243 matches, 295,557 deliveries)
 
