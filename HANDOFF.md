@@ -551,6 +551,7 @@ python reports/generate_report.py
 ### 11.2 Fixed Issues
 1. **Dashboard Player Analysis KeyError** (2026-11-22) — Fixed `src/dashboard.py` line 159: changed `player_data['total_balls_faced']` to `player_data['balls_faced']` to match the `v_batter_career` view column name.
 2. **Dashboard Regression to Mean TypeError** (2026-11-22) — Fixed `src/dashboard.py` lines 294-295: changed dict access `summary['correlation']` and `summary['slope']` to attribute access `summary.correlation` and `summary.slope` since `RegressionSummary` is a dataclass.
+3. **Dashboard Data Validation JSON Error** (2026-11-22) — Fixed `src/statistics/data_access.py` `validate_database()` to return dict with table row counts instead of None, so `st.sidebar.json(val)` works correctly.
 
 ### 11.2 Important Constraints (from User Requirements)
 - **NEVER modify raw source files** — `data/raw/ipl_csv2.zip` is read-only
