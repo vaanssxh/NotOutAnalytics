@@ -9,8 +9,9 @@ import os
 import sqlite3
 from dataclasses import asdict
 
-# Add src to path
-sys.path.insert(0, os.path.join(os.getcwd(), 'src'))
+# Add src to path - use __file__ for reliable project root
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, PROJECT_ROOT)
 
 # Import local modules
 from src.statistics.mean_median import MeanMedianAnalyzer
@@ -117,10 +118,10 @@ elif page == "Player Analysis":
     player_data = career_df[career_df['player_name'] == selected_player].iloc[0]
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Runs", f"{int(player_data['total_runs']):,}")
-    c2.metric("Balls Faced", f"{int(player_data['total_balls_faced']):,}")
+    c1.metric("Runs", f"{int(player_data['runs']):,}")
+    c2.metric("Balls Faced", f"{int(player_data['balls_faced']):,}")
     c3.metric("Strike Rate", f"{player_data['strike_rate']:.2f}")
-    c4.metric("Avg", f"{player_data['batting_average']:.2f}")
+    c4.metric("Avg", f"{player_data['average']:.2f}")
 
     st.divider()
 
