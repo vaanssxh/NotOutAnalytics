@@ -1,0 +1,1334 @@
+{
+  "descriptive_stats": {
+    "career_strike_rates": {
+      "metric_name": "Career Aggregate Strike Rate (min 200 balls)",
+      "mean": 133.3528,
+      "median": 133.14,
+      "std": 19.2302,
+      "minimum": 83.0,
+      "maximum": 228.95,
+      "skewness": 0.6737,
+      "kurtosis": 2.504,
+      "n_observations": 227,
+      "outlier_count": 4,
+      "outlier_threshold_low": 86.055,
+      "outlier_threshold_high": 179.615,
+      "mean_vs_median_diff": 0.2128,
+      "mean_vs_median_pct_diff": 0.16
+    },
+    "league_innings_sr": {
+      "metric_name": "League-wide Innings Strike Rate",
+      "mean": 134.5826,
+      "median": 130.77,
+      "std": 47.6628,
+      "minimum": 0.0,
+      "maximum": 390.0,
+      "skewness": 0.6283,
+      "kurtosis": 1.2285,
+      "n_observations": 10305,
+      "outlier_count": 200,
+      "outlier_threshold_low": 13.365,
+      "outlier_threshold_high": 250.445,
+      "mean_vs_median_diff": 3.8126,
+      "mean_vs_median_pct_diff": 2.92
+    }
+  },
+  "hypothesis_tests": [
+    {
+      "pair": [
+        "V Kohli",
+        "RG Sharma"
+      ],
+      "welch": {
+        "test_name": "Welch's t-test",
+        "player_a": "V Kohli",
+        "player_b": "RG Sharma",
+        "metric": "strike_rate",
+        "sample_size_a": 211,
+        "sample_size_b": 193,
+        "mean_a": 130.32,
+        "mean_b": 130.85,
+        "std_a": 35.44,
+        "std_b": 41.55,
+        "test_statistic": -0.138,
+        "p_value": 0.890331,
+        "degrees_of_freedom": 379.07,
+        "cohens_d": -0.0138,
+        "cohens_d_ci": [
+          -0.2096,
+          0.182
+        ],
+        "mean_difference": -0.5326,
+        "mean_diff_ci": [
+          -8.1223,
+          7.0571
+        ],
+        "significance_level": 0.05,
+        "reject_null": "False",
+        "interpretation": "Fail to reject H0: No significant difference in strike_rate between V Kohli and RG Sharma (p=0.890331 >= 0.05). Effect size: Cohen's d = -0.014 (-0.210, 0.182)."
+      },
+      "mann_whitney": {
+        "test_name": "Mann-Whitney U",
+        "player_a": "V Kohli",
+        "player_b": "RG Sharma",
+        "metric": "strike_rate",
+        "sample_size_a": 211,
+        "sample_size_b": 193,
+        "mean_a": 130.32,
+        "mean_b": 130.85,
+        "std_a": 35.44,
+        "std_b": 41.55,
+        "test_statistic": 19784.5,
+        "p_value": 0.622888,
+        "degrees_of_freedom": null,
+        "cohens_d": 0.0567,
+        "cohens_d_ci": [
+          -0.5,
+          0.5
+        ],
+        "mean_difference": -1.88,
+        "mean_diff_ci": [
+          -9.2309,
+          5.4709
+        ],
+        "significance_level": 0.05,
+        "reject_null": "False",
+        "interpretation": "Fail to reject H0: No significant difference in strike_rate between V Kohli and RG Sharma (p=0.622888 >= 0.05). Rank-biserial r = 0.028."
+      },
+      "recommendation": {
+        "test": "welch_t_test",
+        "reason": "Normality assumption met; parametric test has more power",
+        "welch_p": 0.890331,
+        "mw_p": 0.622888
+      }
+    },
+    {
+      "pair": [
+        "CH Gayle",
+        "AB de Villiers"
+      ],
+      "welch": {
+        "test_name": "Welch's t-test",
+        "player_a": "CH Gayle",
+        "player_b": "AB de Villiers",
+        "metric": "strike_rate",
+        "sample_size_a": 105,
+        "sample_size_b": 119,
+        "mean_a": 146.85,
+        "mean_b": 149.47,
+        "std_a": 57.41,
+        "std_b": 52.97,
+        "test_statistic": -0.3538,
+        "p_value": 0.723875,
+        "degrees_of_freedom": 213.0,
+        "cohens_d": -0.0476,
+        "cohens_d_ci": [
+          -0.3113,
+          0.2165
+        ],
+        "mean_difference": -2.6225,
+        "mean_diff_ci": [
+          -17.2356,
+          11.9906
+        ],
+        "significance_level": 0.05,
+        "reject_null": "False",
+        "interpretation": "Fail to reject H0: No significant difference in strike_rate between CH Gayle and AB de Villiers (p=0.723875 >= 0.05). Effect size: Cohen's d = -0.048 (-0.311, 0.216). WARNING: Normality assumption violated (Shapiro-Wilk p < 0.05). Consider Mann-Whitney U."
+      },
+      "mann_whitney": {
+        "test_name": "Mann-Whitney U",
+        "player_a": "CH Gayle",
+        "player_b": "AB de Villiers",
+        "metric": "strike_rate",
+        "sample_size_a": 105,
+        "sample_size_b": 119,
+        "mean_a": 146.85,
+        "mean_b": 149.47,
+        "std_a": 57.41,
+        "std_b": 52.97,
+        "test_statistic": 5989.5,
+        "p_value": 0.594667,
+        "degrees_of_freedom": null,
+        "cohens_d": 0.0827,
+        "cohens_d_ci": [
+          -0.5,
+          0.5
+        ],
+        "mean_difference": -3.68,
+        "mean_diff_ci": [
+          -18.5526,
+          11.1926
+        ],
+        "significance_level": 0.05,
+        "reject_null": "False",
+        "interpretation": "Fail to reject H0: No significant difference in strike_rate between CH Gayle and AB de Villiers (p=0.594667 >= 0.05). Rank-biserial r = 0.041."
+      },
+      "recommendation": {
+        "test": "mann_whitney_u",
+        "reason": "Normality assumption violated; non-parametric test preferred",
+        "welch_p": 0.723875,
+        "mw_p": 0.594667
+      }
+    },
+    {
+      "pair": [
+        "DA Warner",
+        "KL Rahul"
+      ],
+      "welch": {
+        "test_name": "Welch's t-test",
+        "player_a": "DA Warner",
+        "player_b": "KL Rahul",
+        "metric": "strike_rate",
+        "sample_size_a": 132,
+        "sample_size_b": 122,
+        "mean_a": 139.88,
+        "mean_b": 134.23,
+        "std_a": 39.84,
+        "std_b": 41.08,
+        "test_statistic": 1.1109,
+        "p_value": 0.267668,
+        "degrees_of_freedom": 249.0,
+        "cohens_d": 0.1397,
+        "cohens_d_ci": [
+          -0.1084,
+          0.3869
+        ],
+        "mean_difference": 5.6492,
+        "mean_diff_ci": [
+          -4.3661,
+          15.6644
+        ],
+        "significance_level": 0.05,
+        "reject_null": "False",
+        "interpretation": "Fail to reject H0: No significant difference in strike_rate between DA Warner and KL Rahul (p=0.267668 >= 0.05). Effect size: Cohen's d = 0.140 (-0.108, 0.387). WARNING: Normality assumption violated (Shapiro-Wilk p < 0.05). Consider Mann-Whitney U."
+      },
+      "mann_whitney": {
+        "test_name": "Mann-Whitney U",
+        "player_a": "DA Warner",
+        "player_b": "KL Rahul",
+        "metric": "strike_rate",
+        "sample_size_a": 132,
+        "sample_size_b": 122,
+        "mean_a": 139.88,
+        "mean_b": 134.23,
+        "std_a": 39.84,
+        "std_b": 41.08,
+        "test_statistic": 8919.0,
+        "p_value": 0.138528,
+        "degrees_of_freedom": null,
+        "cohens_d": -0.2166,
+        "cohens_d_ci": [
+          -0.5,
+          0.5
+        ],
+        "mean_difference": 7.41,
+        "mean_diff_ci": [
+          -2.314,
+          17.134
+        ],
+        "significance_level": 0.05,
+        "reject_null": "False",
+        "interpretation": "Fail to reject H0: No significant difference in strike_rate between DA Warner and KL Rahul (p=0.138528 >= 0.05). Rank-biserial r = -0.108."
+      },
+      "recommendation": {
+        "test": "mann_whitney_u",
+        "reason": "Normality assumption violated; non-parametric test preferred",
+        "welch_p": 0.267668,
+        "mw_p": 0.138528
+      }
+    },
+    {
+      "pair": [
+        "MS Dhoni",
+        "SV Samson"
+      ],
+      "welch": {
+        "test_name": "Welch's t-test",
+        "player_a": "MS Dhoni",
+        "player_b": "SV Samson",
+        "metric": "strike_rate",
+        "sample_size_a": 163,
+        "sample_size_b": 130,
+        "mean_a": 139.36,
+        "mean_b": 138.8,
+        "std_a": 50.66,
+        "std_b": 39.6,
+        "test_statistic": 0.1071,
+        "p_value": 0.914808,
+        "degrees_of_freedom": 290.89,
+        "cohens_d": 0.0123,
+        "cohens_d_ci": [
+          -0.2192,
+          0.2437
+        ],
+        "mean_difference": 0.5646,
+        "mean_diff_ci": [
+          -9.8139,
+          10.9431
+        ],
+        "significance_level": 0.05,
+        "reject_null": "False",
+        "interpretation": "Fail to reject H0: No significant difference in strike_rate between MS Dhoni and SV Samson (p=0.914808 >= 0.05). Effect size: Cohen's d = 0.012 (-0.219, 0.244). Note: Unequal variances (Levene's p < 0.05). Welch's test is appropriate."
+      },
+      "mann_whitney": {
+        "test_name": "Mann-Whitney U",
+        "player_a": "MS Dhoni",
+        "player_b": "SV Samson",
+        "metric": "strike_rate",
+        "sample_size_a": 163,
+        "sample_size_b": 130,
+        "mean_a": 139.36,
+        "mean_b": 138.8,
+        "std_a": 50.66,
+        "std_b": 39.6,
+        "test_statistic": 10432.5,
+        "p_value": 0.822095,
+        "degrees_of_freedom": null,
+        "cohens_d": 0.0307,
+        "cohens_d_ci": [
+          -0.5,
+          0.5
+        ],
+        "mean_difference": -1.29,
+        "mean_diff_ci": [
+          -11.128,
+          8.548
+        ],
+        "significance_level": 0.05,
+        "reject_null": "False",
+        "interpretation": "Fail to reject H0: No significant difference in strike_rate between MS Dhoni and SV Samson (p=0.822095 >= 0.05). Rank-biserial r = 0.015."
+      },
+      "recommendation": {
+        "test": "welch_t_test",
+        "reason": "Normality assumption met; parametric test has more power",
+        "welch_p": 0.914808,
+        "mw_p": 0.822095
+      }
+    }
+  ],
+  "bootstrap_cis": [
+    {
+      "player": "V Kohli",
+      "estimate": 136.46987403247837,
+      "ci_lower": 132.04497164449404,
+      "ci_upper": 140.88426144967738
+    },
+    {
+      "player": "RG Sharma",
+      "estimate": 137.18731534370693,
+      "ci_lower": 132.09679908527121,
+      "ci_upper": 142.07528643676525
+    },
+    {
+      "player": "CH Gayle",
+      "estimate": 152.79463430213988,
+      "ci_lower": 143.4036840298769,
+      "ci_upper": 162.05499391853758
+    },
+    {
+      "player": "AB de Villiers",
+      "estimate": 155.70342205323192,
+      "ci_lower": 146.88053307120603,
+      "ci_upper": 164.61677077607746
+    },
+    {
+      "player": "DA Warner",
+      "estimate": 142.8217263917061,
+      "ci_lower": 136.96037053753986,
+      "ci_upper": 148.66980543289714
+    },
+    {
+      "player": "MS Dhoni",
+      "estimate": 138.84529147982065,
+      "ci_lower": 131.6831148852872,
+      "ci_upper": 146.07451529490154
+    }
+  ],
+  "regression_to_mean": {
+    "summary": {
+      "n_players": 213,
+      "mean_first_half_sr": 134.93,
+      "mean_second_half_sr": 133.93,
+      "mean_regression": 1.01,
+      "median_regression": 3.09,
+      "correlation": 0.5993,
+      "r_squared": 0.3592,
+      "slope": 0.6825,
+      "intercept": 41.83,
+      "players_regressed": 118,
+      "players_improved": 95
+    },
+    "league_avg_sr": 133.35,
+    "reliability": 0.5993,
+    "mean_expected": 0.63,
+    "mean_observed": 1.01
+  },
+  "beta_binomial": {
+    "prior": {
+      "alpha": 16.11098255261062,
+      "beta": 9208.02091643526,
+      "league_rate": 0.17922213561365583
+    },
+    "players": [
+      {
+        "player": "V Kohli",
+        "raw_boundary_rate": 16.77736066993936,
+        "shrunken_boundary_rate": 7.294745268467083,
+        "shrinkage_factor": 0.5711490133133803
+      },
+      {
+        "player": "RG Sharma",
+        "raw_boundary_rate": 17.863619876677546,
+        "shrunken_boundary_rate": 6.7926585907496255,
+        "shrinkage_factor": 0.6258684589205862
+      },
+      {
+        "player": "CH Gayle",
+        "raw_boundary_rate": 22.862286228622864,
+        "shrunken_boundary_rate": 6.1965661331894415,
+        "shrinkage_factor": 0.734573147211375
+      },
+      {
+        "player": "AB de Villiers",
+        "raw_boundary_rate": 19.51219512195122,
+        "shrunken_boundary_rate": 5.386108167660187,
+        "shrinkage_factor": 0.7305009540390746
+      },
+      {
+        "player": "DA Warner",
+        "raw_boundary_rate": 19.139876516925696,
+        "shrunken_boundary_rate": 6.573538625972959,
+        "shrinkage_factor": 0.6625992746795616
+      },
+      {
+        "player": "MS Dhoni",
+        "raw_boundary_rate": 16.148597422289612,
+        "shrunken_boundary_rate": 4.970066209586402,
+        "shrinkage_factor": 0.6997981637446596
+      },
+      {
+        "player": "SV Samson",
+        "raw_boundary_rate": 18.387360392263687,
+        "shrunken_boundary_rate": 5.359471992735921,
+        "shrinkage_factor": 0.7153189258740242
+      },
+      {
+        "player": "KL Rahul",
+        "raw_boundary_rate": 17.87508973438622,
+        "shrunken_boundary_rate": 5.693527365870633,
+        "shrinkage_factor": 0.6882072017574061
+      }
+    ]
+  },
+  "multiple_comparisons": {
+    "bonferroni": {
+      "method": "Bonferroni",
+      "alpha": 0.05,
+      "n_tests": 12,
+      "n_rejected": 3,
+      "results": [
+        {
+          "test": "V Kohli vs RG Sharma",
+          "raw_p": 0.890331,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "RG Sharma",
+            "metric": "strike_rate",
+            "test_statistic": -0.13797789177820874,
+            "cohens_d": -0.01384016811700754,
+            "mean_diff": -0.5325950936816923
+          }
+        },
+        {
+          "test": "V Kohli vs CH Gayle",
+          "raw_p": 0.007647,
+          "corrected_p": 0.091759,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "CH Gayle",
+            "metric": "strike_rate",
+            "test_statistic": -2.7052018367615123,
+            "cohens_d": -0.3761192174561448,
+            "mean_diff": -16.53004784473032
+          }
+        },
+        {
+          "test": "V Kohli vs AB de Villiers",
+          "raw_p": 0.000539,
+          "corrected_p": 0.006463,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "AB de Villiers",
+            "metric": "strike_rate",
+            "test_statistic": -3.5246756162621447,
+            "cohens_d": -0.44975919720229524,
+            "mean_diff": -19.15255764865188
+          }
+        },
+        {
+          "test": "V Kohli vs MS Dhoni",
+          "raw_p": 0.053265,
+          "corrected_p": 0.639184,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "MS Dhoni",
+            "metric": "strike_rate",
+            "test_statistic": -1.9410557587377646,
+            "cohens_d": -0.2115494677941633,
+            "mean_diff": -9.041547698659627
+          }
+        },
+        {
+          "test": "V Kohli vs DA Warner",
+          "raw_p": 0.024967,
+          "corrected_p": 0.299607,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "DA Warner",
+            "metric": "strike_rate",
+            "test_statistic": -2.2552836156227962,
+            "cohens_d": -0.25710101464276724,
+            "mean_diff": -9.561998061180532
+          }
+        },
+        {
+          "test": "V Kohli vs KL Rahul",
+          "raw_p": 0.38001,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "KL Rahul",
+            "metric": "strike_rate",
+            "test_statistic": -0.8796181664612804,
+            "cohens_d": -0.10405954065833134,
+            "mean_diff": -3.91282145909409
+          }
+        },
+        {
+          "test": "V Kohli vs S Dhawan",
+          "raw_p": 0.085533,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "S Dhawan",
+            "metric": "strike_rate",
+            "test_statistic": 1.7239978717682976,
+            "cohens_d": 0.17443322105632725,
+            "mean_diff": 5.69173414035285
+          }
+        },
+        {
+          "test": "V Kohli vs AM Rahane",
+          "raw_p": 0.174492,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "AM Rahane",
+            "metric": "strike_rate",
+            "test_statistic": 1.3608965325969866,
+            "cohens_d": 0.14479038203640082,
+            "mean_diff": 4.985357738192491
+          }
+        },
+        {
+          "test": "V Kohli vs JC Buttler",
+          "raw_p": 8.9e-05,
+          "corrected_p": 0.001067,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "JC Buttler",
+            "metric": "strike_rate",
+            "test_statistic": -4.014070383612111,
+            "cohens_d": -0.5160600384426294,
+            "mean_diff": -19.91195260663511
+          }
+        },
+        {
+          "test": "V Kohli vs HH Pandya",
+          "raw_p": 0.002468,
+          "corrected_p": 0.029613,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "HH Pandya",
+            "metric": "strike_rate",
+            "test_statistic": -3.0936171710330185,
+            "cohens_d": -0.46940776599272255,
+            "mean_diff": -20.384730384412876
+          }
+        },
+        {
+          "test": "V Kohli vs Q de Kock",
+          "raw_p": 0.40518,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "Q de Kock",
+            "metric": "strike_rate",
+            "test_statistic": -0.8348670261901684,
+            "cohens_d": -0.10925620493778121,
+            "mean_diff": -3.8644526066350977
+          }
+        },
+        {
+          "test": "V Kohli vs F du Plessis",
+          "raw_p": 0.149723,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "F du Plessis",
+            "metric": "strike_rate",
+            "test_statistic": -1.4457068903468047,
+            "cohens_d": -0.17280065631294,
+            "mean_diff": -6.340478922424552
+          }
+        }
+      ]
+    },
+    "holm_bonferroni": {
+      "method": "Holm-Bonferroni",
+      "alpha": 0.05,
+      "n_tests": 12,
+      "n_rejected": 3,
+      "results": [
+        {
+          "test": "V Kohli vs RG Sharma",
+          "raw_p": 0.890331,
+          "corrected_p": 0.890331,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "RG Sharma",
+            "metric": "strike_rate",
+            "test_statistic": -0.13797789177820874,
+            "cohens_d": -0.01384016811700754,
+            "mean_diff": -0.5325950936816923
+          }
+        },
+        {
+          "test": "V Kohli vs CH Gayle",
+          "raw_p": 0.007647,
+          "corrected_p": 0.068819,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "CH Gayle",
+            "metric": "strike_rate",
+            "test_statistic": -2.7052018367615123,
+            "cohens_d": -0.3761192174561448,
+            "mean_diff": -16.53004784473032
+          }
+        },
+        {
+          "test": "V Kohli vs AB de Villiers",
+          "raw_p": 0.000539,
+          "corrected_p": 0.005924,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "AB de Villiers",
+            "metric": "strike_rate",
+            "test_statistic": -3.5246756162621447,
+            "cohens_d": -0.44975919720229524,
+            "mean_diff": -19.15255764865188
+          }
+        },
+        {
+          "test": "V Kohli vs MS Dhoni",
+          "raw_p": 0.053265,
+          "corrected_p": 0.372858,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "MS Dhoni",
+            "metric": "strike_rate",
+            "test_statistic": -1.9410557587377646,
+            "cohens_d": -0.2115494677941633,
+            "mean_diff": -9.041547698659627
+          }
+        },
+        {
+          "test": "V Kohli vs DA Warner",
+          "raw_p": 0.024967,
+          "corrected_p": 0.199738,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "DA Warner",
+            "metric": "strike_rate",
+            "test_statistic": -2.2552836156227962,
+            "cohens_d": -0.25710101464276724,
+            "mean_diff": -9.561998061180532
+          }
+        },
+        {
+          "test": "V Kohli vs KL Rahul",
+          "raw_p": 0.38001,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "KL Rahul",
+            "metric": "strike_rate",
+            "test_statistic": -0.8796181664612804,
+            "cohens_d": -0.10405954065833134,
+            "mean_diff": -3.91282145909409
+          }
+        },
+        {
+          "test": "V Kohli vs S Dhawan",
+          "raw_p": 0.085533,
+          "corrected_p": 0.513198,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "S Dhawan",
+            "metric": "strike_rate",
+            "test_statistic": 1.7239978717682976,
+            "cohens_d": 0.17443322105632725,
+            "mean_diff": 5.69173414035285
+          }
+        },
+        {
+          "test": "V Kohli vs AM Rahane",
+          "raw_p": 0.174492,
+          "corrected_p": 0.69797,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "AM Rahane",
+            "metric": "strike_rate",
+            "test_statistic": 1.3608965325969866,
+            "cohens_d": 0.14479038203640082,
+            "mean_diff": 4.985357738192491
+          }
+        },
+        {
+          "test": "V Kohli vs JC Buttler",
+          "raw_p": 8.9e-05,
+          "corrected_p": 0.001067,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "JC Buttler",
+            "metric": "strike_rate",
+            "test_statistic": -4.014070383612111,
+            "cohens_d": -0.5160600384426294,
+            "mean_diff": -19.91195260663511
+          }
+        },
+        {
+          "test": "V Kohli vs HH Pandya",
+          "raw_p": 0.002468,
+          "corrected_p": 0.024678,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "HH Pandya",
+            "metric": "strike_rate",
+            "test_statistic": -3.0936171710330185,
+            "cohens_d": -0.46940776599272255,
+            "mean_diff": -20.384730384412876
+          }
+        },
+        {
+          "test": "V Kohli vs Q de Kock",
+          "raw_p": 0.40518,
+          "corrected_p": 0.810361,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "Q de Kock",
+            "metric": "strike_rate",
+            "test_statistic": -0.8348670261901684,
+            "cohens_d": -0.10925620493778121,
+            "mean_diff": -3.8644526066350977
+          }
+        },
+        {
+          "test": "V Kohli vs F du Plessis",
+          "raw_p": 0.149723,
+          "corrected_p": 0.748616,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "F du Plessis",
+            "metric": "strike_rate",
+            "test_statistic": -1.4457068903468047,
+            "cohens_d": -0.17280065631294,
+            "mean_diff": -6.340478922424552
+          }
+        }
+      ]
+    },
+    "benjamini_hochberg": {
+      "method": "Benjamini-Hochberg",
+      "alpha": 0.05,
+      "n_tests": 12,
+      "n_rejected": 4,
+      "results": [
+        {
+          "test": "V Kohli vs RG Sharma",
+          "raw_p": 0.890331,
+          "corrected_p": 0.890331,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "RG Sharma",
+            "metric": "strike_rate",
+            "test_statistic": -0.13797789177820874,
+            "cohens_d": -0.01384016811700754,
+            "mean_diff": -0.5325950936816923
+          }
+        },
+        {
+          "test": "V Kohli vs CH Gayle",
+          "raw_p": 0.007647,
+          "corrected_p": 0.02294,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "CH Gayle",
+            "metric": "strike_rate",
+            "test_statistic": -2.7052018367615123,
+            "cohens_d": -0.3761192174561448,
+            "mean_diff": -16.53004784473032
+          }
+        },
+        {
+          "test": "V Kohli vs AB de Villiers",
+          "raw_p": 0.000539,
+          "corrected_p": 0.003231,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "AB de Villiers",
+            "metric": "strike_rate",
+            "test_statistic": -3.5246756162621447,
+            "cohens_d": -0.44975919720229524,
+            "mean_diff": -19.15255764865188
+          }
+        },
+        {
+          "test": "V Kohli vs MS Dhoni",
+          "raw_p": 0.053265,
+          "corrected_p": 0.106531,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "MS Dhoni",
+            "metric": "strike_rate",
+            "test_statistic": -1.9410557587377646,
+            "cohens_d": -0.2115494677941633,
+            "mean_diff": -9.041547698659627
+          }
+        },
+        {
+          "test": "V Kohli vs DA Warner",
+          "raw_p": 0.024967,
+          "corrected_p": 0.059921,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "DA Warner",
+            "metric": "strike_rate",
+            "test_statistic": -2.2552836156227962,
+            "cohens_d": -0.25710101464276724,
+            "mean_diff": -9.561998061180532
+          }
+        },
+        {
+          "test": "V Kohli vs KL Rahul",
+          "raw_p": 0.38001,
+          "corrected_p": 0.442015,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "KL Rahul",
+            "metric": "strike_rate",
+            "test_statistic": -0.8796181664612804,
+            "cohens_d": -0.10405954065833134,
+            "mean_diff": -3.91282145909409
+          }
+        },
+        {
+          "test": "V Kohli vs S Dhawan",
+          "raw_p": 0.085533,
+          "corrected_p": 0.146628,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "S Dhawan",
+            "metric": "strike_rate",
+            "test_statistic": 1.7239978717682976,
+            "cohens_d": 0.17443322105632725,
+            "mean_diff": 5.69173414035285
+          }
+        },
+        {
+          "test": "V Kohli vs AM Rahane",
+          "raw_p": 0.174492,
+          "corrected_p": 0.232657,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "AM Rahane",
+            "metric": "strike_rate",
+            "test_statistic": 1.3608965325969866,
+            "cohens_d": 0.14479038203640082,
+            "mean_diff": 4.985357738192491
+          }
+        },
+        {
+          "test": "V Kohli vs JC Buttler",
+          "raw_p": 8.9e-05,
+          "corrected_p": 0.001067,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "JC Buttler",
+            "metric": "strike_rate",
+            "test_statistic": -4.014070383612111,
+            "cohens_d": -0.5160600384426294,
+            "mean_diff": -19.91195260663511
+          }
+        },
+        {
+          "test": "V Kohli vs HH Pandya",
+          "raw_p": 0.002468,
+          "corrected_p": 0.009871,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "HH Pandya",
+            "metric": "strike_rate",
+            "test_statistic": -3.0936171710330185,
+            "cohens_d": -0.46940776599272255,
+            "mean_diff": -20.384730384412876
+          }
+        },
+        {
+          "test": "V Kohli vs Q de Kock",
+          "raw_p": 0.40518,
+          "corrected_p": 0.442015,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "Q de Kock",
+            "metric": "strike_rate",
+            "test_statistic": -0.8348670261901684,
+            "cohens_d": -0.10925620493778121,
+            "mean_diff": -3.8644526066350977
+          }
+        },
+        {
+          "test": "V Kohli vs F du Plessis",
+          "raw_p": 0.149723,
+          "corrected_p": 0.224585,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "F du Plessis",
+            "metric": "strike_rate",
+            "test_statistic": -1.4457068903468047,
+            "cohens_d": -0.17280065631294,
+            "mean_diff": -6.340478922424552
+          }
+        }
+      ]
+    },
+    "benjamini_yekutieli": {
+      "method": "Benjamini-Yekutieli",
+      "alpha": 0.05,
+      "n_tests": 12,
+      "n_rejected": 3,
+      "results": [
+        {
+          "test": "V Kohli vs RG Sharma",
+          "raw_p": 0.890331,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "RG Sharma",
+            "metric": "strike_rate",
+            "test_statistic": -0.13797789177820874,
+            "cohens_d": -0.01384016811700754,
+            "mean_diff": -0.5325950936816923
+          }
+        },
+        {
+          "test": "V Kohli vs CH Gayle",
+          "raw_p": 0.007647,
+          "corrected_p": 0.071187,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "CH Gayle",
+            "metric": "strike_rate",
+            "test_statistic": -2.7052018367615123,
+            "cohens_d": -0.3761192174561448,
+            "mean_diff": -16.53004784473032
+          }
+        },
+        {
+          "test": "V Kohli vs AB de Villiers",
+          "raw_p": 0.000539,
+          "corrected_p": 0.010028,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "AB de Villiers",
+            "metric": "strike_rate",
+            "test_statistic": -3.5246756162621447,
+            "cohens_d": -0.44975919720229524,
+            "mean_diff": -19.15255764865188
+          }
+        },
+        {
+          "test": "V Kohli vs MS Dhoni",
+          "raw_p": 0.053265,
+          "corrected_p": 0.330587,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "MS Dhoni",
+            "metric": "strike_rate",
+            "test_statistic": -1.9410557587377646,
+            "cohens_d": -0.2115494677941633,
+            "mean_diff": -9.041547698659627
+          }
+        },
+        {
+          "test": "V Kohli vs DA Warner",
+          "raw_p": 0.024967,
+          "corrected_p": 0.185948,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "DA Warner",
+            "metric": "strike_rate",
+            "test_statistic": -2.2552836156227962,
+            "cohens_d": -0.25710101464276724,
+            "mean_diff": -9.561998061180532
+          }
+        },
+        {
+          "test": "V Kohli vs KL Rahul",
+          "raw_p": 0.38001,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "KL Rahul",
+            "metric": "strike_rate",
+            "test_statistic": -0.8796181664612804,
+            "cohens_d": -0.10405954065833134,
+            "mean_diff": -3.91282145909409
+          }
+        },
+        {
+          "test": "V Kohli vs S Dhawan",
+          "raw_p": 0.085533,
+          "corrected_p": 0.455018,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "S Dhawan",
+            "metric": "strike_rate",
+            "test_statistic": 1.7239978717682976,
+            "cohens_d": 0.17443322105632725,
+            "mean_diff": 5.69173414035285
+          }
+        },
+        {
+          "test": "V Kohli vs AM Rahane",
+          "raw_p": 0.174492,
+          "corrected_p": 0.721982,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "AM Rahane",
+            "metric": "strike_rate",
+            "test_statistic": 1.3608965325969866,
+            "cohens_d": 0.14479038203640082,
+            "mean_diff": 4.985357738192491
+          }
+        },
+        {
+          "test": "V Kohli vs JC Buttler",
+          "raw_p": 8.9e-05,
+          "corrected_p": 0.003311,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "JC Buttler",
+            "metric": "strike_rate",
+            "test_statistic": -4.014070383612111,
+            "cohens_d": -0.5160600384426294,
+            "mean_diff": -19.91195260663511
+          }
+        },
+        {
+          "test": "V Kohli vs HH Pandya",
+          "raw_p": 0.002468,
+          "corrected_p": 0.030632,
+          "rejected": true,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "HH Pandya",
+            "metric": "strike_rate",
+            "test_statistic": -3.0936171710330185,
+            "cohens_d": -0.46940776599272255,
+            "mean_diff": -20.384730384412876
+          }
+        },
+        {
+          "test": "V Kohli vs Q de Kock",
+          "raw_p": 0.40518,
+          "corrected_p": 1.0,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "Q de Kock",
+            "metric": "strike_rate",
+            "test_statistic": -0.8348670261901684,
+            "cohens_d": -0.10925620493778121,
+            "mean_diff": -3.8644526066350977
+          }
+        },
+        {
+          "test": "V Kohli vs F du Plessis",
+          "raw_p": 0.149723,
+          "corrected_p": 0.696934,
+          "rejected": false,
+          "details": {
+            "player_a": "V Kohli",
+            "player_b": "F du Plessis",
+            "metric": "strike_rate",
+            "test_statistic": -1.4457068903468047,
+            "cohens_d": -0.17280065631294,
+            "mean_diff": -6.340478922424552
+          }
+        }
+      ]
+    },
+    "summary": {
+      "n_tests": 12,
+      "raw_p_values": [
+        0.890331,
+        0.007647,
+        0.000539,
+        0.053265,
+        0.024967,
+        0.38001,
+        0.085533,
+        0.174492,
+        8.9e-05,
+        0.002468,
+        0.40518,
+        0.149723
+      ],
+      "test_names": [
+        "V Kohli vs RG Sharma",
+        "V Kohli vs CH Gayle",
+        "V Kohli vs AB de Villiers",
+        "V Kohli vs MS Dhoni",
+        "V Kohli vs DA Warner",
+        "V Kohli vs KL Rahul",
+        "V Kohli vs S Dhawan",
+        "V Kohli vs AM Rahane",
+        "V Kohli vs JC Buttler",
+        "V Kohli vs HH Pandya",
+        "V Kohli vs Q de Kock",
+        "V Kohli vs F du Plessis"
+      ],
+      "rejections": {
+        "bonferroni": 3,
+        "holm_bonferroni": 3,
+        "benjamini_hochberg": 4,
+        "benjamini_yekutieli": 3
+      },
+      "recommendation": {
+        "primary": "benjamini_hochberg",
+        "reason": "Moderate number of tests; FDR control balances power and error control",
+        "caveat": "Assumes independence or positive dependence"
+      }
+    }
+  },
+  "player_comparisons": [
+    {
+      "target_a": "V Kohli",
+      "target_b": "RG Sharma",
+      "verdict": "No statistically significant difference between V Kohli and RG Sharma on strike_rate",
+      "confidence": "medium",
+      "summary_a": {
+        "player_name": "V Kohli",
+        "role": "batter",
+        "total_innings": 211,
+        "total_balls_faced": 6926,
+        "total_runs": 9336,
+        "career_strike_rate": 134.8,
+        "avg_innings_strike_rate": 130.32004739336492,
+        "batting_average": 40.77,
+        "boundary_rate": 0.1678,
+        "dismissal_rate": 108.5308056872038,
+        "total_balls_bowled": 0,
+        "total_wickets": 0,
+        "economy_rate": 0.0,
+        "bowling_average": 0.0,
+        "bowling_strike_rate": 0.0
+      },
+      "summary_b": {
+        "player_name": "RG Sharma",
+        "role": "batter",
+        "total_innings": 193,
+        "total_balls_faced": 5514,
+        "total_runs": 7329,
+        "career_strike_rate": 132.92,
+        "avg_innings_strike_rate": 130.8526424870466,
+        "batting_average": 30.04,
+        "boundary_rate": 0.1786,
+        "dismissal_rate": 126.42487046632125,
+        "total_balls_bowled": 0,
+        "total_wickets": 0,
+        "economy_rate": 0.0,
+        "bowling_average": 0.0,
+        "bowling_strike_rate": 0.0
+      }
+    },
+    {
+      "target_a": "CH Gayle",
+      "target_b": "AB de Villiers",
+      "verdict": "No statistically significant difference between CH Gayle and AB de Villiers on strike_rate",
+      "confidence": "medium",
+      "summary_a": {
+        "player_name": "CH Gayle",
+        "role": "batter",
+        "total_innings": 105,
+        "total_balls_faced": 3333,
+        "total_runs": 4965,
+        "career_strike_rate": 148.96,
+        "avg_innings_strike_rate": 146.85009523809524,
+        "batting_average": 40.04,
+        "boundary_rate": 0.2286,
+        "dismissal_rate": 118.0952380952381,
+        "total_balls_bowled": 0,
+        "total_wickets": 0,
+        "economy_rate": 0.0,
+        "bowling_average": 0.0,
+        "bowling_strike_rate": 0.0
+      },
+      "summary_b": {
+        "player_name": "AB de Villiers",
+        "role": "batter",
+        "total_innings": 119,
+        "total_balls_faced": 3403,
+        "total_runs": 5162,
+        "career_strike_rate": 151.69,
+        "avg_innings_strike_rate": 149.4726050420168,
+        "batting_average": 42.31,
+        "boundary_rate": 0.1951,
+        "dismissal_rate": 102.52100840336134,
+        "total_balls_bowled": 0,
+        "total_wickets": 0,
+        "economy_rate": 0.0,
+        "bowling_average": 0.0,
+        "bowling_strike_rate": 0.0
+      }
+    },
+    {
+      "target_a": "DA Warner",
+      "target_b": "KL Rahul",
+      "verdict": "No statistically significant difference between DA Warner and KL Rahul on strike_rate",
+      "confidence": "medium",
+      "summary_a": {
+        "player_name": "DA Warner",
+        "role": "batter",
+        "total_innings": 132,
+        "total_balls_faced": 4697,
+        "total_runs": 6565,
+        "career_strike_rate": 139.77,
+        "avg_innings_strike_rate": 139.88204545454545,
+        "batting_average": 42.08,
+        "boundary_rate": 0.1914,
+        "dismissal_rate": 118.18181818181819,
+        "total_balls_bowled": 0,
+        "total_wickets": 0,
+        "economy_rate": 0.0,
+        "bowling_average": 0.0,
+        "bowling_strike_rate": 0.0
+      },
+      "summary_b": {
+        "player_name": "KL Rahul",
+        "role": "batter",
+        "total_innings": 122,
+        "total_balls_faced": 4179,
+        "total_runs": 5815,
+        "career_strike_rate": 139.15,
+        "avg_innings_strike_rate": 134.232868852459,
+        "batting_average": 47.28,
+        "boundary_rate": 0.1788,
+        "dismissal_rate": 100.81967213114753,
+        "total_balls_bowled": 0,
+        "total_wickets": 0,
+        "economy_rate": 0.0,
+        "bowling_average": 0.0,
+        "bowling_strike_rate": 0.0
+      }
+    },
+    {
+      "target_a": "MS Dhoni",
+      "target_b": "SV Samson",
+      "verdict": "No statistically significant difference between MS Dhoni and SV Samson on strike_rate",
+      "confidence": "medium",
+      "summary_a": {
+        "player_name": "MS Dhoni",
+        "role": "batter",
+        "total_innings": 163,
+        "total_balls_faced": 3957,
+        "total_runs": 5439,
+        "career_strike_rate": 137.45,
+        "avg_innings_strike_rate": 139.36159509202454,
+        "batting_average": 39.13,
+        "boundary_rate": 0.1615,
+        "dismissal_rate": 85.2760736196319,
+        "total_balls_bowled": 0,
+        "total_wickets": 0,
+        "economy_rate": 0.0,
+        "bowling_average": 0.0,
+        "bowling_strike_rate": 0.0
+      },
+      "summary_b": {
+        "player_name": "SV Samson",
+        "role": "batter",
+        "total_innings": 130,
+        "total_balls_faced": 3671,
+        "total_runs": 5181,
+        "career_strike_rate": 141.13,
+        "avg_innings_strike_rate": 138.797,
+        "batting_average": 32.58,
+        "boundary_rate": 0.1839,
+        "dismissal_rate": 122.30769230769232,
+        "total_balls_bowled": 0,
+        "total_wickets": 0,
+        "economy_rate": 0.0,
+        "bowling_average": 0.0,
+        "bowling_strike_rate": 0.0
+      }
+    }
+  ]
+}
