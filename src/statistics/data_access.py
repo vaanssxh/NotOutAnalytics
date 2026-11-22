@@ -379,10 +379,13 @@ def validate_database():
     """Validate database has required data."""
     conn = get_connection()
     tables = ['seasons', 'teams', 'venues', 'players', 'matches', 'innings', 'deliveries', 'player_innings']
+    results = {}
     for table in tables:
         count = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+        results[table] = count
         logger.info(f"Table {table}: {count} rows")
     conn.close()
+    return results
 
 
 if __name__ == '__main__':
