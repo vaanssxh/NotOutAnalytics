@@ -156,7 +156,7 @@ elif page == "Player Analysis":
         - Estimate: {ci_result.original_estimate:.2f}
         - Upper: {ci_result.ci_upper:.2f}
 
-        The width of this interval ({ci_result.ci_upper - ci_result.ci_lower:.1f}) represents the uncertainty in the player's true ability based on their sample size of {int(player_data['total_balls_faced'])} balls.
+        The width of this interval ({ci_result.ci_upper - ci_result.ci_lower:.1f}) represents the uncertainty in the player's true ability based on their sample size of {int(player_data['balls_faced'])} balls.
         """)
 
 # --- PAGE: PLAYER COMPARISON ---
