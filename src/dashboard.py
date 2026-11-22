@@ -291,13 +291,13 @@ elif page == "Regression to Mean":
     st.plotly_chart(fig, use_container_width=True)
 
     col_reg1, col_reg2 = st.columns(2)
-    col_reg1.metric("Correlation", f"{summary['correlation']:.4f}")
-    col_reg2.metric("Regression Slope", f"{summary['slope']:.4f}")
+    col_reg1.metric("Correlation", f"{summary.correlation:.4f}")
+    col_reg2.metric("Regression Slope", f"{summary.slope:.4f}")
 
     st.write(f"""
     **Interpretation**:
-    A slope of **{summary['slope']:.2f}** means that for every 10 points a player was above the average
-    in their first half, they are expected to be only **{summary['slope']*10:.1f}** points above
+    A slope of **{summary.slope:.2f}** means that for every 10 points a player was above the average
+    in their first half, they are expected to be only **{summary.slope*10:.1f}** points above
     the average in their second half. This confirms significant **Regression to the Mean**.
     """)
 
