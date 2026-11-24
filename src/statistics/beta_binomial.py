@@ -115,8 +115,8 @@ class BetaBinomialShrinkage:
                                  total_boundaries=total_boundaries, total_balls=total_balls,
                                  n_players=n_players, method='moments')
 
-        # Observed variance in boundary rates
-        observed_rates = df['boundary_rate'].values / 100  # Convert from percentage
+        # Observed variance in boundary rates (boundary_rate is stored as fraction in DB)
+        observed_rates = df['boundary_rate'].values
         observed_mean = np.mean(observed_rates)
         observed_var = np.var(observed_rates, ddof=1)
 
@@ -172,7 +172,7 @@ class BetaBinomialShrinkage:
         # Log-likelihood: sum(log(gamma(alpha+beta)) - log(gamma(alpha)) - log(gamma(beta))
         #                  + (alpha-1)*log(x_i) + (beta-1)*log(1-x_i))
 
-        rates = df['boundary_rate'].values / 100
+        rates = df['boundary_rate'].values
         rates = np.clip(rates, 1e-6, 1 - 1e-6)  # Avoid boundary issues
 
         def neg_log_likelihood(params):

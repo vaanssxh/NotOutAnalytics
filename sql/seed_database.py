@@ -531,7 +531,7 @@ class DatabaseSeeder:
                 match_result, 0, 0, is_batting_first
             ))
 
-        # Bowler innings - update existing rows
+        # Bowler innings - upsert (insert new row if bowler didn't bat, otherwise update)
         for boli in processor.get_bowler_innings():
             match_id = boli.match_id
             innings_id = self._get_innings_id(match_id, boli.innings)
@@ -540,20 +540,72 @@ class DatabaseSeeder:
 
             player_id = self.player_map.get(boli.bowler)
             team_id = self.team_alias_map.get(boli.bowling_team)
+            opponent_id = self.team_alias_map.get(boli.batter_team)
+            venue_id = self.venue_map.get(boli.venue)
+            season_id = self.season_map.get(boli.season)
 
+            # Determine match result for bowler's team
+            self.cursor.execute("""
+                SELECT winner_id, team1_id, team2_id
+                FROM matches WHERE match_id = ?
+            """, (match_id,))
+            mrow = self.cursor.fetchone()
+            match_result = ''
+            is_batting_first = (boli.innings == 1)
+            if mrow:
+                winner_id, team1_id, team2_id = mrow
+                if winner_id == team_id:
+                    match_result = 'won'
+                elif winner_id is not None:
+                    match_result = 'lost'
+                else:
+                    match_result = 'no_result'
+
+            # Try UPDATE first (for players who also batted in this innings)
             self.cursor.execute("""
                 UPDATE player_innings SET
                     overs_bowled = ?, balls_bowled = ?, maidens = ?,
                     runs_conceded = ?, wickets_taken = ?, wides_bowled = ?,
                     noballs_bowled = ?, dot_balls = ?, economy_rate = ?,
-                    bowling_strike_rate = ?, bowling_average = ?
+                    bowling_strike_rate = ?, bowling_average = ?,
+                    team_id = ?, opponent_team_id = ?, venue_id = ?, season_id = ?,
+                    start_date = ?, match_result = ?, is_batting_first = ?
                 WHERE match_id = ? AND innings_id = ? AND player_id = ?
             """, (
                 boli.overs, boli.balls_bowled, boli.maidens,
                 boli.runs_conceded, boli.wickets, boli.wides, boli.noballs,
                 boli.dot_balls, boli.economy, boli.strike_rate, boli.average,
+                team_id, opponent_id, venue_id, season_id, boli.start_date,
+                match_result, is_batting_first,
                 match_id, innings_id, player_id
             ))
+
+            # If no row was updated, insert new row for bowler-only performance
+            if self.cursor.rowcount == 0:
+                self.cursor.execute("""
+                    INSERT INTO player_innings (
+                        match_id, innings_id, innings_number, player_id, team_id,
+                        opponent_team_id, venue_id, season_id, start_date,
+                        runs_scored, balls_faced, fours, sixes, boundaries,
+                        strike_rate, batting_position, dismissed, dismissal_kind,
+                        fielder_id, dismissal_over, dismissal_ball,
+                        match_result, team_innings_total,
+                        team_innings_wickets, is_batting_first,
+                        overs_bowled, balls_bowled, maidens,
+                        runs_conceded, wickets_taken, wides_bowled,
+                        noballs_bowled, dot_balls, economy_rate,
+                        bowling_strike_rate, bowling_average
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    match_id, innings_id, boli.innings, player_id, team_id,
+                    opponent_id, venue_id, season_id, boli.start_date,
+                    0, 0, 0, 0, 0,  # Batting stats (didn't bat): runs, balls, 4s, 6s, boundaries
+                    None, None, False, None, None, None, None,  # Batting details: SR, pos, dismissed, kind, fielder, dismissal_over, dismissal_ball
+                    match_result, 0, 0, is_batting_first,
+                    boli.overs, boli.balls_bowled, boli.maidens,
+                    boli.runs_conceded, boli.wickets, boli.wides, boli.noballs,
+                    boli.dot_balls, boli.economy, boli.strike_rate, boli.average
+                ))
 
         self.conn.commit()
         logger.info("Player innings seeded successfully")

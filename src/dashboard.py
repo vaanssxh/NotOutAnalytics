@@ -68,15 +68,26 @@ if page == "Overview":
 
     # Database stats
     conn = get_connection()
-    players_count = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
+    players_total = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
     innings_count = conn.execute("SELECT COUNT(*) FROM innings").fetchone()[0]
     deliveries_count = conn.execute("SELECT COUNT(*) FROM deliveries").fetchone()[0]
+
+    # Qualified batters (min 200 career balls)
+    qualified_batters = conn.execute(
+        "SELECT COUNT(*) FROM v_batter_career WHERE balls_faced >= 200"
+    ).fetchone()[0]
+
+    # Qualified bowlers (min 100 career balls)
+    qualified_bowlers = conn.execute(
+        "SELECT COUNT(*) FROM v_bowler_career WHERE balls_bowled >= 100"
+    ).fetchone()[0]
     conn.close()
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Total Players", f"{players_count:,}")
-    col2.metric("Total Innings", f"{innings_count:,}")
-    col3.metric("Total Deliveries", f"{deliveries_count:,}")
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Total Players", f"{players_total:,}")
+    col2.metric("Qualified Batters (≥200 balls)", f"{qualified_batters:,}")
+    col3.metric("Qualified Bowlers (≥100 balls)", f"{qualified_bowlers:,}")
+    col4.metric("Total Deliveries", f"{deliveries_count:,}")
 
     st.divider()
 
@@ -123,41 +134,74 @@ elif page == "Player Analysis":
     c3.metric("Strike Rate", f"{player_data['strike_rate']:.2f}")
     c4.metric("Avg", f"{player_data['average']:.2f}")
 
+    # Boundary Rate (converted to percentage)
+    c5 = st.columns(1)[0]
+    c5.metric("Boundary %", f"{player_data['boundary_rate']*100:.2f}%")
+
     st.divider()
 
-    # Bootstrap CI
+    # Bootstrap CI for Strike Rate
     with st.spinner("Computing Bootstrap Confidence Intervals..."):
-        ci_result = analyzers['bootstrap'].player_career_sr_ci(selected_player)
+        ci_sr = analyzers['bootstrap'].player_career_sr_ci(selected_player)
+        ci_br = analyzers['bootstrap'].player_boundary_rate_ci(selected_player)
 
     st.subheader(f"Statistical Reliability: {selected_player}")
 
-    col_ci1, col_ci2 = st.columns([2, 1])
+    col_ci1, col_ci2 = st.columns(2)
+
     with col_ci1:
-        # Visualizing CI
-        fig_ci = go.Figure()
-        fig_ci.add_trace(go.Bar(
-            name='Strike Rate',
-            x=[selected_player], y=[ci_result.original_estimate],
-            error_y=dict(
-                type='data',
-                symmetric=False,
-                array=[ci_result.ci_upper - ci_result.original_estimate],
-                arrayminus=[ci_result.original_estimate - ci_result.ci_lower]
-            ),
-            marker_color='#3498db'
-        ))
-        fig_ci.update_layout(title="Career Strike Rate with 95% Bootstrap CI", yaxis_title="Strike Rate")
-        st.plotly_chart(fig_ci, use_container_width=True)
+        # Strike Rate Bootstrap Distribution
+        sr_boot = analyzers['bootstrap'].player_career_sr_ci(selected_player, return_bootstrap=True)
+        if sr_boot.bootstrap_distribution is not None and len(sr_boot.bootstrap_distribution) > 0:
+            fig_sr = px.histogram(
+                x=sr_boot.bootstrap_distribution, nbins=40,
+                title=f"Bootstrap Distribution: Strike Rate ({selected_player})",
+                labels={'x': 'Strike Rate', 'y': 'Frequency'},
+                color_discrete_sequence=['#3498db']
+            )
+            fig_sr.add_vline(x=sr_boot.original_estimate, line_dash="dash", line_color="red",
+                           annotation_text=f"Estimate: {sr_boot.original_estimate:.1f}")
+            fig_sr.add_vline(x=sr_boot.ci_lower, line_dash="dot", line_color="green",
+                           annotation_text=f"CI Lower: {sr_boot.ci_lower:.1f}")
+            fig_sr.add_vline(x=sr_boot.ci_upper, line_dash="dot", line_color="green",
+                           annotation_text=f"CI Upper: {sr_boot.ci_upper:.1f}")
+            st.plotly_chart(fig_sr, use_container_width=True)
+        else:
+            st.info("Bootstrap samples not available for distribution plot")
 
     with col_ci2:
-        st.info(f"""
-        **95% Confidence Interval**
-        - Lower: {ci_result.ci_lower:.2f}
-        - Estimate: {ci_result.original_estimate:.2f}
-        - Upper: {ci_result.ci_upper:.2f}
+        # Boundary Rate Bootstrap Distribution
+        br_boot = analyzers['bootstrap'].player_boundary_rate_ci(selected_player, return_bootstrap=True)
+        if br_boot.bootstrap_distribution is not None and len(br_boot.bootstrap_distribution) > 0:
+            fig_br = px.histogram(
+                x=br_boot.bootstrap_distribution * 100, nbins=40,
+                title=f"Bootstrap Distribution: Boundary Rate ({selected_player})",
+                labels={'x': 'Boundary Rate (%)', 'y': 'Frequency'},
+                color_discrete_sequence=['#e74c3c']
+            )
+            fig_br.add_vline(x=br_boot.original_estimate * 100, line_dash="dash", line_color="red",
+                           annotation_text=f"Estimate: {br_boot.original_estimate*100:.1f}%")
+            fig_br.add_vline(x=br_boot.ci_lower * 100, line_dash="dot", line_color="green",
+                           annotation_text=f"CI Lower: {br_boot.ci_lower*100:.1f}%")
+            fig_br.add_vline(x=br_boot.ci_upper * 100, line_dash="dot", line_color="green",
+                           annotation_text=f"CI Upper: {br_boot.ci_upper*100:.1f}%")
+            st.plotly_chart(fig_br, use_container_width=True)
+        else:
+            st.info("Bootstrap samples not available for distribution plot")
 
-        The width of this interval ({ci_result.ci_upper - ci_result.ci_lower:.1f}) represents the uncertainty in the player's true ability based on their sample size of {int(player_data['balls_faced'])} balls.
-        """)
+    # Summary table
+    st.divider()
+    st.subheader("95% Bootstrap Confidence Intervals Summary")
+    summary_df = pd.DataFrame({
+        "Metric": ["Strike Rate", "Boundary Rate (%)"],
+        "Estimate": [f"{ci_sr.original_estimate:.2f}", f"{ci_br.original_estimate*100:.2f}"],
+        "CI Lower": [f"{ci_sr.ci_lower:.2f}", f"{ci_br.ci_lower*100:.2f}"],
+        "CI Upper": [f"{ci_sr.ci_upper:.2f}", f"{ci_br.ci_upper*100:.2f}"],
+        "CI Width": [f"{ci_sr.ci_upper - ci_sr.ci_lower:.2f}", f"{(ci_br.ci_upper - ci_br.ci_lower)*100:.2f}"]
+    })
+    st.table(summary_df)
+
+    st.caption(f"Based on {int(player_data['balls_faced'])} balls faced. Bootstrap samples: {analyzers['bootstrap'].n_bootstrap}")
 
 # --- PAGE: PLAYER COMPARISON ---
 elif page == "Player Comparison":
@@ -178,9 +222,6 @@ elif page == "Player Comparison":
         with st.spinner("Running statistical comparison..."):
             comparison = analyzers['tool'].compare(p1, p2, 'strike_rate')
 
-        st.header(f"Verdict: {comparison.verdict}")
-        st.subheader(f"Confidence: {comparison.confidence.upper()}")
-
         # Stats Table
         comp_data = {
             "Metric": ["Balls Faced", "Innings", "Career Strike Rate", "Batting Average", "Boundary %"],
@@ -197,9 +238,18 @@ elif page == "Player Comparison":
         col_res1, col_res2, col_res3 = st.columns(3)
         col_res1.metric("p-value", f"{welch['p_value']:.4f}")
         col_res2.metric("Effect Size (Cohen's d)", f"{welch['cohens_d']:.3f}")
-        col_res3.metric("Significant", "Yes" if welch['reject_null'] == 'True' else "No")
+        col_res3.metric("Significant", "Yes" if welch.get('reject_null', False) else "No")
 
         st.write(f"**Interpretation**: {welch['interpretation']}")
+
+        # Overall Verdict (based on hypothesis test)
+        st.divider()
+        st.subheader("Overall Verdict")
+        if welch.get('reject_null', False):
+            st.success(f"**Verdict**: {comparison.verdict}")
+        else:
+            st.info(f"**Verdict**: {comparison.verdict}")
+        st.write(f"**Confidence**: {comparison.confidence.upper()}")
 
         # Confidence Interval of Difference
         st.divider()
@@ -290,42 +340,186 @@ elif page == "Regression to Mean":
 
     st.plotly_chart(fig, use_container_width=True)
 
-    col_reg1, col_reg2 = st.columns(2)
-    col_reg1.metric("Correlation", f"{summary.correlation:.4f}")
+    col_reg1, col_reg2, col_reg3 = st.columns(3)
+    col_reg1.metric("Correlation (r)", f"{summary.correlation:.4f}")
     col_reg2.metric("Regression Slope", f"{summary.slope:.4f}")
+    col_reg3.metric("R²", f"{summary.r_squared:.4f}")
 
     st.write(f"""
     **Interpretation**:
-    A slope of **{summary.slope:.2f}** means that for every 10 points a player was above the average
-    in their first half, they are expected to be only **{summary.slope*10:.1f}** points above
-    the average in their second half. This confirms significant **Regression to the Mean**.
+    - **Correlation (r = {summary.correlation:.3f})**: Moderate positive correlation between first and second half performance.
+      This means early career performance has some predictive power, but there's substantial variability.
+    - **Slope = {summary.slope:.3f}**: A slope < 1.0 indicates regression toward the mean. For every 10 points
+      a player's first-half strike rate deviates from the league average, their second-half strike rate is expected
+      to deviate by only **{summary.slope * 10:.1f} points** (i.e., ~{(1-summary.slope)*100:.0f}% regression toward the mean).
+    - **R² = {summary.r_squared:.3f}**: About {summary.r_squared*100:.0f}% of the variance in second-half strike rates
+      is explained by first-half performance.
     """)
+
+    # Statistical significance of slope != 1
+    st.divider()
+    st.subheader("Statistical Significance")
+
+    # Test if slope is significantly different from 1 (no regression)
+    # t = (slope - 1) / SE(slope)
+    n = summary.n_players
+    x = df_reg['first_half_strike_rate'].values
+    y = df_reg['second_half_strike_rate'].values
+    x_mean = np.mean(x)
+    ss_x = np.sum((x - x_mean) ** 2)
+    y_pred = summary.slope * x + summary.intercept
+    residuals = y - y_pred
+    mse = np.sum(residuals ** 2) / (n - 2)
+    se_slope = np.sqrt(mse / ss_x)
+    t_stat = (summary.slope - 1) / se_slope
+
+    from scipy import stats
+    p_value = 2 * stats.t.sf(abs(t_stat), n - 2)
+
+    col_sig1, col_sig2 = st.columns(2)
+    col_sig1.metric("t-statistic (slope ≠ 1)", f"{t_stat:.2f}")
+    col_sig2.metric("p-value", f"{p_value:.2e}")
+
+    if p_value < 0.05:
+        st.success(f"The slope ({summary.slope:.3f}) is **significantly different from 1** (p = {p_value:.2e}). This provides statistical evidence for regression to the mean — extreme first-half performances tend to regress toward the league average in the second half.")
+    else:
+        st.info(f"The slope ({summary.slope:.3f}) is **not significantly different from 1** (p = {p_value:.3f}). There is insufficient evidence to conclude regression to the mean from this analysis.")
+
+    st.caption(f"Based on {summary.n_players} players with ≥{analyzers['regression'].min_balls_per_half} balls per career half.")
 
 # --- PAGE: METHODOLOGY ---
 else:
     st.title("Methodology & Statistical Assumptions")
 
     st.markdown("""
-    ### Statistical Engine Components
-
-    1. **Descriptive Statistics**: Comparison of Mean vs Median to handle the positive skew common in T20 strike rates.
-    2. **Hypothesis Testing**:
-       - **Welch's t-test**: Used for comparing means when variances are unequal.
-       - **Mann-Whitney U**: Non-parametric alternative that compares the distributions without assuming normality.
-    3. **Bootstrap Confidence Intervals**: We use the percentile method with 10,000 resamples (1,000 in this dashboard for performance) to quantify the uncertainty of any point estimate.
-    4. **Empirical Bayes (Shrinkage)**: Using a Beta-Binomial model to adjust boundary rates. This prevents "small sample bias" where players with few balls appear at the top of rankings.
-    5. **Regression to the Mean**: Splitting careers into two halves (min 100 balls each) to quantify performance stability using Pearson correlation and OLS regression.
-    6. **Multiple Comparison Correction**: Using **Benjamini-Hochberg (BH)** procedure to control the False Discovery Rate when performing multiple pairwise tests.
-
-    ### Thresholds & Qualification
-    - **Minimum balls per innings**: 10 (filters out non-representative cameos)
-    - **Minimum career balls**: 200 (for comparative analysis)
-    - **Regression split**: 100 balls per half minimum
-
-    ### Disclosures
-    - **Bowling Analytics**: Currently skipped. Bowling aggregates are not populated in the `player_innings` table for all metrics.
-    - **Assumptions**: Hypothesis tests assume independence between innings, which may be slightly violated by player form or shared match conditions.
+    This dashboard implements a complete statistical engine for IPL batting analytics.
+    Below are the methods, assumptions, and limitations for each component.
     """)
+
+    # --- 1. Data Pipeline ---
+    with st.expander("📊 1. Data Pipeline & Quality", expanded=True):
+        st.markdown("""
+        **Source**: Cricsheet IPL ball-by-ball data (2008-2025), 18 seasons, 1,243 matches, ~295K deliveries.
+
+        **Pipeline Stages**:
+        1. **Raw** (`data/raw/`): Immutable Cricsheet CSVs (2 files/match, 27 columns)
+        2. **Cleaned** (`data/processed/`): Cricket rules applied (wides ≠ balls faced, no-balls = balls faced,
+           byes/leg-byes ≠ batter runs, boundaries from `runs_off_bat=4/6`, bowler wickets exclude run outs)
+        3. **Aggregated**: 4-level hierarchy — Innings → Season → Career (batter & bowler)
+        4. **Database** (`data/ipl_analytics.db`): Normalized schema (11 tables, 4 views)
+
+        **Quality Controls**:
+        - Fixed random seeds (`np.random.seed(42)`, `random.seed(42)`) for reproducibility
+        - Validation report on every pipeline run (`validation_report.json`)
+        - Quality flags on suspicious records (no silent discards)
+        """)
+
+    # --- 2. Statistical Engine ---
+    with st.expander("📈 2. Statistical Engine Components", expanded=True):
+        st.markdown("""
+        #### 2.1 Descriptive Statistics (`mean_median.py`)
+        - Mean, median, skewness, kurtosis for strike rates, boundary rates, batting averages
+        - Handles positive skew in T20 strike rate distributions
+
+        #### 2.2 Hypothesis Testing (`hypothesis_testing.py`)
+        - **Welch's t-test**: Unequal variances, compares means of innings-level metrics
+        - **Mann-Whitney U**: Non-parametric, compares full distributions without normality assumption
+        - **Cohen's d**: Effect size for practical significance
+        - **Recommendation engine**: Chooses test based on normality (Shapiro-Wilk) and variance equality (Levene's)
+
+        #### 2.3 Bootstrap Confidence Intervals (`bootstrap_ci.py`)
+        - **Method**: Percentile bootstrap (bias-corrected available)
+        - **Resamples**: 10,000 (production) / 1,000 (dashboard for speed)
+        - **Confidence level**: 95%
+        - **Metrics**: Career SR, Boundary Rate, Batting Average, Avg Innings SR, Difference between players
+
+        #### 2.4 Empirical Bayes Shrinkage (`beta_binomial.py`)
+        - **Model**: Boundaries ~ Binomial(balls_faced, p), Prior: p ~ Beta(α, β)
+        - **Prior estimation**: Method of moments (default) or MLE (scipy)
+        - **Posterior**: Beta(α + boundaries, β + balls_faced - boundaries)
+        - **Shrunken estimate**: Posterior mean = (α + boundaries) / (α + β + balls_faced)
+        - **Qualification**: Min 200 career balls for prior estimation
+
+        #### 2.5 Regression to Mean (`regression_to_mean.py`)
+        - **Split**: Chronological career halves (min 100 balls each half)
+        - **Metrics**: Pearson correlation, OLS slope/intercept, regression magnitude
+        - **Theory vs Experiment**: Compares observed regression to theoretical prediction from reliability
+        - **Significance**: Tests H₀: slope = 1 (no regression) vs H₁: slope < 1
+
+        #### 2.6 Multiple Comparisons (`multiple_comparisons.py`)
+        - **Holm-Bonferroni**: Family-wise error rate control
+        - **Benjamini-Hochberg (BH)**: False Discovery Rate control (default)
+        - **Benjamini-Yekutieli**: FDR under arbitrary dependence
+        - **Bonferroni**: Conservative FWER control
+        """)
+
+    # --- 3. Thresholds & Qualification ---
+    with st.expander("⚙️ 3. Thresholds & Qualification Criteria", expanded=True):
+        st.markdown("""
+        | Parameter | Value | Rationale |
+        |-----------|-------|-----------|
+        | Min balls per innings | 10 | Filters non-representative cameos |
+        | Min career balls (comparison) | 200 | Ensures stable estimates for hypothesis tests |
+        | Min career balls (shrinkage prior) | 200 | Sufficient data for prior estimation |
+        | Min balls per career half (regression) | 100 | Each half needs meaningful sample |
+        | Bootstrap resamples (dashboard) | 1,000 | Performance vs accuracy tradeoff |
+        | Bootstrap resamples (production) | 10,000 | Publication quality |
+        | Confidence level | 95% | Standard |
+        | Significance level (α) | 0.05 | Standard |
+        """)
+
+    # --- 4. Database Views Used ---
+    with st.expander("🗄️ 4. Database Views", expanded=True):
+        st.markdown("""
+        | View | Purpose | Key Columns |
+        |------|---------|-------------|
+        | `v_batter_career` | Career batting aggregates | `player_name`, `runs`, `balls_faced`, `strike_rate`, `average`, `boundary_rate`, `dismissals` |
+        | `v_bowler_career` | Career bowling aggregates | `player_name`, `balls_bowled`, `wickets`, `economy`, `average`, `strike_rate` |
+        | `v_batter_season` | Season batting aggregates | Same as career + `season` |
+        | `v_bowler_season` | Season bowling aggregates | Same as career + `season` |
+
+        **Note**: `boundary_rate` in database = `boundaries / balls_faced` (fraction, not percentage).
+        Dashboard displays multiply by 100 for percentage.
+        """)
+
+    # --- 5. Disclosures & Limitations ---
+    with st.expander("⚠️ 5. Disclosures & Limitations", expanded=True):
+        st.markdown("""
+        **Known Limitations**:
+        - **Bowling Analytics**: Bowling aggregates exist in career/season views, but `player_innings` table
+          does not have populated bowler innings for all metrics. Bowling comparison is disabled.
+        - **Independence Assumption**: Hypothesis tests assume independence between innings.
+          This may be violated by player form, shared match conditions, or team strategies.
+        - **Sample Size**: Some players have few qualifying innings (≥10 balls); bootstrap CIs may be wide.
+        - **Temporal Effects**: League-wide strike rates have increased over time; career comparisons
+          across eras don't adjust for this.
+        - **Positional Context**: Batting position not accounted for — openers vs finishers have different roles.
+
+        **Reproducibility**:
+        - All stochastic code uses fixed seeds (`np.random.seed(42)`, `random.seed(42)`)
+        - Pipeline can be re-run: `python src/pipeline.py`
+        - Database seeded: `python sql/seed_database.py`
+        - Statistical analysis: `python execute_analysis.py`
+        - Full test suite: `python -m pytest tests/ -v`
+        """)
+
+    # --- 6. References ---
+    with st.expander("📚 6. References & Handbook Alignment", expanded=True):
+        st.markdown("""
+        This project follows the **Probability & Statistics Project Handbook** (JG University, BTech CSE):
+
+        - **Section 1**: Exploratory Data Analysis — Distribution visualizations, skewness/kurtosis
+        - **Section 2**: Estimation — Bootstrap CIs, Empirical Bayes shrinkage
+        - **Section 3**: Hypothesis Testing — Welch's t-test, Mann-Whitney U, effect sizes
+        - **Section 4**: Regression — Career split analysis, regression to mean
+        - **Section 5**: Multiple Comparisons — Holm-Bonferroni, Benjamini-Hochberg corrections
+
+        **Statistical References**:
+        - Efron & Tibshirani (1993): *An Introduction to the Bootstrap*
+        - Gelman et al. (2013): *Bayesian Data Analysis* (Empirical Bayes)
+        - Benjamini & Hochberg (1995): *Controlling the False Discovery Rate*
+        - Handbook: *Probability & Statistics Project Handbook.pdf* (in `requirements/`)
+        """)
 
 st.sidebar.divider()
 if st.sidebar.button("Run Data Validation"):

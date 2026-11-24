@@ -221,7 +221,7 @@ class BootstrapCI:
 
     # --- Public methods for player analysis ---
 
-    def player_career_sr_ci(self, player_name: str) -> BootstrapResult:
+    def player_career_sr_ci(self, player_name: str, return_bootstrap: bool = False) -> BootstrapResult:
         """Bootstrap CI for player's career aggregate strike rate."""
         df = get_batter_innings(player_name, min_balls=self.min_balls_per_innings)
         if len(df) < 2:
@@ -244,7 +244,7 @@ class BootstrapCI:
         bias = np.mean(bootstrap_stats) - original
         se = np.std(bootstrap_stats, ddof=1)
 
-        return BootstrapResult(
+        result = BootstrapResult(
             metric_name="Career Aggregate Strike Rate",
             player_name=player_name,
             statistic=self.strike_rate_statistic,
@@ -253,10 +253,11 @@ class BootstrapCI:
             ci_lower=ci_lower,
             ci_upper=ci_upper,
             confidence_level=self.confidence_level,
-            bootstrap_distribution=bootstrap_stats,
+            bootstrap_distribution=bootstrap_stats if return_bootstrap else np.array([]),
             bias=bias,
             std_error=se,
         )
+        return result
 
     def player_avg_innings_sr_ci(self, player_name: str) -> BootstrapResult:
         """Bootstrap CI for player's average innings strike rate."""
@@ -265,7 +266,7 @@ class BootstrapCI:
         return self.compute_ci(values, self.mean_statistic,
                                "Average Innings Strike Rate", player_name)
 
-    def player_boundary_rate_ci(self, player_name: str) -> BootstrapResult:
+    def player_boundary_rate_ci(self, player_name: str, return_bootstrap: bool = False) -> BootstrapResult:
         """Bootstrap CI for player's boundary rate."""
         df = get_batter_innings(player_name, min_balls=self.min_balls_per_innings)
         if len(df) < 2:
@@ -283,7 +284,7 @@ class BootstrapCI:
         bias = np.mean(bootstrap_stats) - original
         se = np.std(bootstrap_stats, ddof=1)
 
-        return BootstrapResult(
+        result = BootstrapResult(
             metric_name="Boundary Rate (%)",
             player_name=player_name,
             statistic=self.boundary_rate_statistic,
@@ -292,10 +293,11 @@ class BootstrapCI:
             ci_lower=ci_lower,
             ci_upper=ci_upper,
             confidence_level=self.confidence_level,
-            bootstrap_distribution=bootstrap_stats,
+            bootstrap_distribution=bootstrap_stats if return_bootstrap else np.array([]),
             bias=bias,
             std_error=se,
         )
+        return result
 
     def player_batting_average_ci(self, player_name: str) -> BootstrapResult:
         """Bootstrap CI for player's batting average."""

@@ -118,7 +118,7 @@ class PlayerComparisonTool:
         career_sr = float(career_row['strike_rate'])
         avg_innings_sr = float(bat_innings['strike_rate'].mean()) if len(bat_innings) > 0 else 0
         batting_avg = float(career_row['average']) if career_row['dismissals'] > 0 else float('inf')
-        boundary_rate = float(career_row['boundary_rate'])
+        boundary_rate = float(career_row['boundary_rate']) * 100  # Convert fraction to percentage
         dismissal_rate = float(career_row['dismissals']) / total_innings if total_innings > 0 else 0
 
         # Bowling
